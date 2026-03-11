@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package analytics;
+
+service AnalyticsService {
+  rpc LogClick (ClickEvent) returns (LogResponse);
+}
+
+message ClickEvent {
+  string url_id = 1;
+  string short_code = 2;
+  string ip_address = 3;
+  string user_agent = 4;
+  string referrer = 5;
+}
+
+message LogResponse {
+  bool success = 1;
+}

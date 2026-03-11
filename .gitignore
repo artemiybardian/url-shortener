@@ -2,7 +2,9 @@
 node_modules/
 vendor/
 __pycache__/
+*.pyc
 venv/
+.venv/
 
 # Environment
 .env
@@ -28,6 +30,10 @@ build/
 # Logs
 *.log
 logs/
+
+# Cache
+.ruff_cache/
+.pytest_cache/
 
 # Docker
 docker-compose.override.yml
