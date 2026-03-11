@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+vendor/
+__pycache__/
+venv/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/
+*.out
+
+# Logs
+*.log
+logs/
+
+# Docker
+docker-compose.override.yml
