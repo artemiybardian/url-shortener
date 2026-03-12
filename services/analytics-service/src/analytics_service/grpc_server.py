@@ -17,6 +17,7 @@ class AnalyticsGRPCServicer(analytics_pb2_grpc.AnalyticsServiceServicer):
             ip_address=request.ip_address,
             user_agent=request.user_agent,
             referrer=request.referrer,
+            country=request.country,
         )
         try:
             async with async_session() as session:

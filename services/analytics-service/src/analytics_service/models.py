@@ -16,4 +16,5 @@ class Click(Base):
     ip_address: Mapped[str] = mapped_column(String(45), nullable=False)
     user_agent: Mapped[str] = mapped_column(String(1024), default="")
     referrer: Mapped[str] = mapped_column(String(2048), default="")
+    country: Mapped[str] = mapped_column(String(2), default="")
     clicked_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

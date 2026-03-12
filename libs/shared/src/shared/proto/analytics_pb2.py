@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0f\x61nalytics.proto\x12\tanalytics\"j\n\nClickEvent\x12\x0e\n\x06url_id\x18\x01 \x01(\t\x12\x12\n\nshort_code\x18\x02 \x01(\t\x12\x12\n\nip_address\x18\x03 \x01(\t\x12\x12\n\nuser_agent\x18\x04 \x01(\t\x12\x10\n\x08referrer\x18\x05 \x01(\t\"\x1e\n\x0bLogResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x32M\n\x10\x41nalyticsService\x12\x39\n\x08LogClick\x12\x15.analytics.ClickEvent\x1a\x16.analytics.LogResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0f\x61nalytics.proto\x12\tanalytics\"{\n\nClickEvent\x12\x0e\n\x06url_id\x18\x01 \x01(\t\x12\x12\n\nshort_code\x18\x02 \x01(\t\x12\x12\n\nip_address\x18\x03 \x01(\t\x12\x12\n\nuser_agent\x18\x04 \x01(\t\x12\x10\n\x08referrer\x18\x05 \x01(\t\x12\x0f\n\x07\x63ountry\x18\x06 \x01(\t\"\x1e\n\x0bLogResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x32M\n\x10\x41nalyticsService\x12\x39\n\x08LogClick\x12\x15.analytics.ClickEvent\x1a\x16.analytics.LogResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,9 +32,9 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'analytics_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_CLICKEVENT']._serialized_start=30
-  _globals['_CLICKEVENT']._serialized_end=136
-  _globals['_LOGRESPONSE']._serialized_start=138
-  _globals['_LOGRESPONSE']._serialized_end=168
-  _globals['_ANALYTICSSERVICE']._serialized_start=170
-  _globals['_ANALYTICSSERVICE']._serialized_end=247
+  _globals['_CLICKEVENT']._serialized_end=153
+  _globals['_LOGRESPONSE']._serialized_start=155
+  _globals['_LOGRESPONSE']._serialized_end=185
+  _globals['_ANALYTICSSERVICE']._serialized_start=187
+  _globals['_ANALYTICSSERVICE']._serialized_end=264
 # @@protoc_insertion_point(module_scope)

@@ -12,6 +12,7 @@ message ClickEvent {
   string ip_address = 3;
   string user_agent = 4;
   string referrer = 5;
+  string country = 6;
 }
 
 message LogResponse {

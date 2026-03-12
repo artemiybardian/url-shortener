@@ -27,6 +27,7 @@ async def log_click(
     ip_address: str,
     user_agent: str = "",
     referrer: str = "",
+    country: str = "",
 ) -> None:
     """Fire-and-forget click logging via analytics-service gRPC."""
     async with grpc.aio.insecure_channel(settings.analytics_grpc_address) as channel:
@@ -37,4 +38,5 @@ async def log_click(
             ip_address=ip_address,
             user_agent=user_agent,
             referrer=referrer,
+            country=country,
         ))

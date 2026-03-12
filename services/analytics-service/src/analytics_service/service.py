@@ -28,15 +28,27 @@ async def get_url_stats(session: AsyncSession, short_code: str) -> dict:
         )
     ).all()
 
+    countries = (
+        await session.execute(
+            select(Click.country, func.count().label("count"))
+            .where(Click.short_code == short_code, Click.country != "")
+            .group_by(Click.country)
+            .order_by(func.count().desc())
+            .limit(10)
+        )
+    ).all()
+
     return {
         "short_code": short_code,
         "total_clicks": total or 0,
         "top_referrers": [{"referrer": r, "count": c} for r, c in referrers],
+        "top_countries": [{"country": co, "count": c} for co, c in countries],
         "recent_clicks": [
             {
                 "ip_address": c.ip_address,
                 "user_agent": c.user_agent,
                 "referrer": c.referrer,
+                "country": c.country,
                 "clicked_at": c.clicked_at.isoformat() if c.clicked_at else None,
             }
             for c in recent_clicks
