@@ -9,8 +9,9 @@ import {
   type Url,
   type Stats,
 } from "./schemas";
+import { getRefreshToken, saveTokens, clearTokens } from "./auth";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 async function request(path: string, options: RequestInit = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
@@ -21,6 +22,30 @@ async function request(path: string, options: RequestInit = {}) {
     },
   });
 
+  if (res.status === 401 && options.headers) {
+    const authHeader = (options.headers as Record<string, string>)["Authorization"];
+    if (authHeader) {
+      const newToken = await tryRefresh();
+      if (newToken) {
+        const retryRes = await fetch(`${API_BASE}${path}`, {
+          ...options,
+          headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+            Authorization: `Bearer ${newToken}`,
+          },
+        });
+        if (retryRes.ok) {
+          if (retryRes.status === 204) return null;
+          return retryRes.json();
+        }
+      }
+      clearTokens();
+      if (typeof window !== "undefined") window.location.href = "/login";
+      throw new Error("Session expired");
+    }
+  }
+
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     throw new Error(body.detail || `Request failed: ${res.status}`);
@@ -28,6 +53,24 @@ async function request(path: string, options: RequestInit = {}) {
 
   if (res.status === 204) return null;
   return res.json();
+}
+
+async function tryRefresh(): Promise<string | null> {
+  const rt = getRefreshToken();
+  if (!rt) return null;
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: rt }),
+    });
+    if (!res.ok) return null;
+    const data = TokenPairSchema.parse(await res.json());
+    saveTokens(data.access_token, data.refresh_token);
+    return data.access_token;
+  } catch {
+    return null;
+  }
 }
 
 function authHeaders(token: string) {

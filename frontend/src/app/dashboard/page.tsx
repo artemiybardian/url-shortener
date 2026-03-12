@@ -3,13 +3,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createUrl, deleteUrl, listUrls, getQrUrl } from "@/lib/api";
+import { createUrl, deleteUrl, listUrls, getMe, getQrUrl } from "@/lib/api";
 import { clearTokens, getToken, isLoggedIn } from "@/lib/auth";
 import type { Url } from "@/lib/schemas";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [urls, setUrls] = useState<Url[]>([]);
+  const [email, setEmail] = useState("");
   const [originalUrl, setOriginalUrl] = useState("");
   const [customCode, setCustomCode] = useState("");
   const [error, setError] = useState("");
@@ -30,6 +31,13 @@ export default function DashboardPage() {
       router.replace("/login");
       return;
     }
+    const token = getToken()!;
+    getMe(token)
+      .then((user) => setEmail(user.email))
+      .catch(() => {
+        clearTokens();
+        router.replace("/login");
+      });
     loadUrls();
   }, [router, loadUrls]);
 
@@ -70,7 +78,12 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <div>
+          <h1 className="text-2xl font-bold">Dashboard</h1>
+          {email && (
+            <p className="text-sm text-gray-500">{email}</p>
+          )}
+        </div>
         <button
           onClick={handleLogout}
           className="text-sm text-gray-500 underline"
