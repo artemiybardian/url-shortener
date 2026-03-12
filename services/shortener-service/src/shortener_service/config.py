@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     postgres_port: int = 5432
     shortener_db_name: str = "shortener_db"
 
+    jwt_secret_key: str = "super-secret-change-me-in-production"
+    jwt_algorithm: str = "HS256"
+
     shortener_grpc_port: int = 50051
 
     @property
