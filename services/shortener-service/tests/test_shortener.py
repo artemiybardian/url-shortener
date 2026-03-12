@@ -60,3 +60,20 @@ async def test_delete_nonexistent_url(client, auth_headers):
 async def test_create_url_no_auth(client):
     resp = await client.post("/", json={"original_url": "https://example.com"})
     assert resp.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_qr_code(client, auth_headers):
+    create_resp = await client.post("/", json={"original_url": "https://qr.com"}, headers=auth_headers)
+    code = create_resp.json()["short_code"]
+
+    resp = await client.get(f"/{code}/qr")
+    assert resp.status_code == 200
+    assert resp.headers["content-type"] == "image/png"
+    assert resp.content[:8] == b"\x89PNG\r\n\x1a\n"
+
+
+@pytest.mark.asyncio
+async def test_qr_code_not_found(client):
+    resp = await client.get("/nope123/qr")
+    assert resp.status_code == 404
