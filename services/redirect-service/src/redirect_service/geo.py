@@ -19,7 +19,7 @@ def _get_reader() -> geoip2.database.Reader | None:
     if _reader is not None:
         return _reader
     try:
-        import geoip2.database
+        import geoip2.database  # noqa: PLC0415
 
         _reader = geoip2.database.Reader("/data/GeoLite2-Country.mmdb")
     except Exception:
@@ -35,6 +35,7 @@ def lookup_country(ip_address: str) -> str:
         return ""
     try:
         resp = reader.country(ip_address)
-        return resp.country.iso_code or ""
     except Exception:
         return ""
+    else:
+        return resp.country.iso_code or ""

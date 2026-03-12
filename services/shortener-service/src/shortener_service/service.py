@@ -44,9 +44,7 @@ async def create_short_url(
 
 
 async def list_user_urls(session: AsyncSession, user_id: uuid.UUID) -> list[URL]:
-    result = await session.execute(
-        select(URL).where(URL.user_id == user_id).order_by(URL.created_at.desc())
-    )
+    result = await session.execute(select(URL).where(URL.user_id == user_id).order_by(URL.created_at.desc()))
     return list(result.scalars().all())
 
 

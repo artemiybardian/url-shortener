@@ -5,18 +5,17 @@ from analytics_service.models import Click
 
 
 async def get_url_stats(session: AsyncSession, short_code: str) -> dict:
-    total = await session.scalar(
-        select(func.count()).where(Click.short_code == short_code)
-    )
+    total = await session.scalar(select(func.count()).where(Click.short_code == short_code))
 
     recent_clicks = (
-        await session.execute(
-            select(Click)
-            .where(Click.short_code == short_code)
-            .order_by(Click.clicked_at.desc())
-            .limit(20)
+        (
+            await session.execute(
+                select(Click).where(Click.short_code == short_code).order_by(Click.clicked_at.desc()).limit(20)
+            )
         )
-    ).scalars().all()
+        .scalars()
+        .all()
+    )
 
     referrers = (
         await session.execute(

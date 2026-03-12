@@ -28,14 +28,16 @@ async def redirect(short_code: str, request: Request):
 
     client_ip = request.client.host if request.client else "unknown"
 
-    asyncio.create_task(_log_click_safe(
-        url_id=url_data["url_id"],
-        short_code=short_code,
-        ip_address=client_ip,
-        user_agent=request.headers.get("user-agent", ""),
-        referrer=request.headers.get("referer", ""),
-        country=lookup_country(client_ip),
-    ))
+    _task = asyncio.create_task(
+        _log_click_safe(  # noqa: RUF006
+            url_id=url_data["url_id"],
+            short_code=short_code,
+            ip_address=client_ip,
+            user_agent=request.headers.get("user-agent", ""),
+            referrer=request.headers.get("referer", ""),
+            country=lookup_country(client_ip),
+        )
+    )
 
     return RedirectResponse(url=url_data["original_url"], status_code=status.HTTP_301_MOVED_PERMANENTLY)
 

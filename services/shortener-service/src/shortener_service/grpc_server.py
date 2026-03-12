@@ -15,9 +15,7 @@ logger = logging.getLogger(__name__)
 class ShortenerGRPCServicer(shortener_pb2_grpc.ShortenerServiceServicer):
     async def ResolveURL(self, request, context):  # noqa: N802
         async with async_session() as session:
-            result = await session.execute(
-                select(URL).where(URL.short_code == request.short_code)
-            )
+            result = await session.execute(select(URL).where(URL.short_code == request.short_code))
             url = result.scalar_one_or_none()
 
         if url is None:
@@ -32,9 +30,7 @@ class ShortenerGRPCServicer(shortener_pb2_grpc.ShortenerServiceServicer):
 
 async def serve() -> None:
     server = grpc.aio.server()
-    shortener_pb2_grpc.add_ShortenerServiceServicer_to_server(
-        ShortenerGRPCServicer(), server
-    )
+    shortener_pb2_grpc.add_ShortenerServiceServicer_to_server(ShortenerGRPCServicer(), server)
     listen_addr = f"[::]:{settings.shortener_grpc_port}"
     server.add_insecure_port(listen_addr)
     logger.info("gRPC server starting on %s", listen_addr)

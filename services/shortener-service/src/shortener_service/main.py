@@ -15,9 +15,7 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     grpc_server = grpc.aio.server()
-    shortener_pb2_grpc.add_ShortenerServiceServicer_to_server(
-        ShortenerGRPCServicer(), grpc_server
-    )
+    shortener_pb2_grpc.add_ShortenerServiceServicer_to_server(ShortenerGRPCServicer(), grpc_server)
     listen_addr = f"[::]:{settings.shortener_grpc_port}"
     grpc_server.add_insecure_port(listen_addr)
     await grpc_server.start()

@@ -17,13 +17,15 @@ async def test_stats_empty(client):
 @pytest.mark.asyncio
 async def test_stats_with_clicks(client, session):
     for i in range(3):
-        session.add(Click(
-            url_id="url-1",
-            short_code="xyz",
-            ip_address=f"1.2.3.{i}",
-            user_agent="TestBot/1.0",
-            referrer="https://google.com" if i < 2 else "",
-        ))
+        session.add(
+            Click(
+                url_id="url-1",
+                short_code="xyz",
+                ip_address=f"1.2.3.{i}",
+                user_agent="TestBot/1.0",
+                referrer="https://google.com" if i < 2 else "",
+            )
+        )
     await session.commit()
 
     resp = await client.get("/xyz/stats")
@@ -38,11 +40,13 @@ async def test_stats_with_clicks(client, session):
 @pytest.mark.asyncio
 async def test_stats_recent_clicks_limit(client, session):
     for i in range(25):
-        session.add(Click(
-            url_id="url-2",
-            short_code="many",
-            ip_address=f"10.0.0.{i}",
-        ))
+        session.add(
+            Click(
+                url_id="url-2",
+                short_code="many",
+                ip_address=f"10.0.0.{i}",
+            )
+        )
     await session.commit()
 
     resp = await client.get("/many/stats")

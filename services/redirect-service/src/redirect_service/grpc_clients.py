@@ -32,11 +32,13 @@ async def log_click(
     """Fire-and-forget click logging via analytics-service gRPC."""
     async with grpc.aio.insecure_channel(settings.analytics_grpc_address) as channel:
         stub = analytics_pb2_grpc.AnalyticsServiceStub(channel)
-        await stub.LogClick(analytics_pb2.ClickEvent(
-            url_id=url_id,
-            short_code=short_code,
-            ip_address=ip_address,
-            user_agent=user_agent,
-            referrer=referrer,
-            country=country,
-        ))
+        await stub.LogClick(
+            analytics_pb2.ClickEvent(
+                url_id=url_id,
+                short_code=short_code,
+                ip_address=ip_address,
+                user_agent=user_agent,
+                referrer=referrer,
+                country=country,
+            )
+        )

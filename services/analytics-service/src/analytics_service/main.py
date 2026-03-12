@@ -15,9 +15,7 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     grpc_server = grpc.aio.server()
-    analytics_pb2_grpc.add_AnalyticsServiceServicer_to_server(
-        AnalyticsGRPCServicer(), grpc_server
-    )
+    analytics_pb2_grpc.add_AnalyticsServiceServicer_to_server(AnalyticsGRPCServicer(), grpc_server)
     listen_addr = f"[::]:{settings.analytics_grpc_port}"
     grpc_server.add_insecure_port(listen_addr)
     await grpc_server.start()

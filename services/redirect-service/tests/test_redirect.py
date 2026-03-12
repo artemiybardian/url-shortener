@@ -1,8 +1,10 @@
+from unittest.mock import AsyncMock, patch
+
 import pytest
 
 
 @pytest.mark.asyncio
-async def test_redirect_success(client, mock_resolve_url, mock_log_click, mock_cache):
+async def test_redirect_success(client, mock_resolve_url, mock_log_click, mock_cache):  # noqa: ARG001
     mock_resolve_url.return_value = {
         "original_url": "https://example.com",
         "url_id": "uuid-123",
@@ -16,7 +18,7 @@ async def test_redirect_success(client, mock_resolve_url, mock_log_click, mock_c
 
 
 @pytest.mark.asyncio
-async def test_redirect_not_found(client, mock_resolve_url, mock_log_click, mock_cache):
+async def test_redirect_not_found(client, mock_resolve_url, mock_log_click, mock_cache):  # noqa: ARG001
     mock_resolve_url.return_value = None
 
     resp = await client.get("/nope")
@@ -24,7 +26,7 @@ async def test_redirect_not_found(client, mock_resolve_url, mock_log_click, mock
 
 
 @pytest.mark.asyncio
-async def test_redirect_deactivated(client, mock_resolve_url, mock_log_click, mock_cache):
+async def test_redirect_deactivated(client, mock_resolve_url, mock_log_click, mock_cache):  # noqa: ARG001
     mock_resolve_url.return_value = {
         "original_url": "https://example.com",
         "url_id": "uuid-123",
@@ -36,9 +38,7 @@ async def test_redirect_deactivated(client, mock_resolve_url, mock_log_click, mo
 
 
 @pytest.mark.asyncio
-async def test_redirect_uses_cache(client, mock_resolve_url, mock_log_click):
-    from unittest.mock import AsyncMock, patch
-
+async def test_redirect_uses_cache(client, mock_resolve_url, mock_log_click):  # noqa: ARG001
     cached = {
         "original_url": "https://cached.com",
         "url_id": "uuid-cached",

@@ -26,7 +26,7 @@ async def test_login_success(client):
     data = resp.json()
     assert "access_token" in data
     assert "refresh_token" in data
-    assert data["token_type"] == "bearer"
+    assert data["token_type"] == "bearer"  # noqa: S105
 
 
 @pytest.mark.asyncio

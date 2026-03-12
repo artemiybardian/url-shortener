@@ -1,7 +1,5 @@
 import logging
 
-import grpc
-
 from analytics_service.database import async_session
 from analytics_service.models import Click
 from shared.proto import analytics_pb2, analytics_pb2_grpc
@@ -10,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class AnalyticsGRPCServicer(analytics_pb2_grpc.AnalyticsServiceServicer):
-    async def LogClick(self, request, context):  # noqa: N802
+    async def LogClick(self, request, context):  # noqa: ARG002, N802
         click = Click(
             url_id=request.url_id,
             short_code=request.short_code,
