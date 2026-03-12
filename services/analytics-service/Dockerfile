@@ -14,5 +14,5 @@ RUN uv sync --frozen --package analytics-service --no-dev
 
 EXPOSE 8004 50052
 
-CMD ["uv", "run", "--package", "analytics-service", "--no-dev", \
-     "uvicorn", "analytics_service.main:app", "--host", "0.0.0.0", "--port", "8004"]
+COPY services/analytics-service/entrypoint.sh /entrypoint.sh
+CMD ["/entrypoint.sh"]

@@ -14,5 +14,5 @@ RUN uv sync --frozen --package shortener-service --no-dev
 
 EXPOSE 8002 50051
 
-CMD ["uv", "run", "--package", "shortener-service", "--no-dev", \
-     "uvicorn", "shortener_service.main:app", "--host", "0.0.0.0", "--port", "8002"]
+COPY services/shortener-service/entrypoint.sh /entrypoint.sh
+CMD ["/entrypoint.sh"]

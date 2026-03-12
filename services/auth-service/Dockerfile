@@ -14,5 +14,5 @@ RUN uv sync --frozen --package auth-service --no-dev
 
 EXPOSE 8001
 
-CMD ["uv", "run", "--package", "auth-service", "--no-dev", \
-     "uvicorn", "auth_service.main:app", "--host", "0.0.0.0", "--port", "8001"]
+COPY services/auth-service/entrypoint.sh /entrypoint.sh
+CMD ["/entrypoint.sh"]
