@@ -1,86 +1,48 @@
-# URL Shortener
+# Shortly
 
-Microservice-based URL shortener built with Python, FastAPI, and gRPC.
+Microservice-based URL shortener with analytics, built with FastAPI and Next.js.
 
 ## Architecture
 
-| Service | Port | gRPC | Description |
-|---------|------|------|-------------|
-| **nginx** | 80 | — | Reverse proxy, single entry point |
-| **auth-service** | 8001 | — | Registration, authentication, JWT |
-| **shortener-service** | 8002 | 50051 | Short link generation, custom aliases |
-| **redirect-service** | 8003 | — | Fast HTTP redirect (high-load optimized) |
-| **analytics-service** | 8004 | 50052 | Click stats, geo, referrers |
+The backend is split into four independent microservices communicating via gRPC, sitting behind an Nginx reverse proxy.
 
-## Features
-
-- Custom short links
-- Click analytics
-- Geo tracking
-- QR code generation
+| Service | Description |
+|---|---|
+| **auth-service** | Registration, login, JWT tokens |
+| **shortener-service** | Link creation, custom aliases, QR codes |
+| **redirect-service** | Fast HTTP redirects, Redis caching, geo lookup |
+| **analytics-service** | Click tracking, stats by country / referrer |
 
 ## Tech Stack
 
-- **Language:** Python 3.12+
-- **Framework:** FastAPI
-- **Inter-service:** gRPC (protobuf)
-- **Database:** PostgreSQL (async via SQLAlchemy + asyncpg)
-- **Cache:** Redis
-- **Migrations:** Alembic
-- **Package manager:** uv (workspace)
-- **Linter:** ruff
-- **Tests:** pytest + pytest-asyncio + httpx
-- **Proxy:** nginx
-- **Containerization:** Docker Compose
+**Backend** — Python 3.12, FastAPI, gRPC / Protobuf, SQLAlchemy + asyncpg, Alembic, Redis
 
-## Getting Started
+**Frontend** — Next.js 16, React 19, Tailwind CSS 4, Zod
 
-### Prerequisites
+**Infra** — Docker Compose, Nginx, PostgreSQL 17, uv workspace
 
-- [uv](https://docs.astral.sh/uv/) (Python package manager)
-- [Docker](https://docs.docker.com/get-docker/) & Docker Compose
-
-### Local Development
+## Quick Start
 
 ```bash
-# Install dependencies
-uv sync --all-packages
-
-# Run linter
-uv run ruff check .
-
-# Run tests
-uv run pytest -v
-
-# Run with Docker Compose
 cp .env.example .env
 docker compose up --build
 ```
 
-### Regenerate Proto Stubs
-
-```bash
-uv run python -m grpc_tools.protoc \
-  -I proto \
-  --python_out=libs/shared/src/shared/proto \
-  --grpc_python_out=libs/shared/src/shared/proto \
-  --pyi_out=libs/shared/src/shared/proto \
-  proto/shortener.proto proto/analytics.proto
-```
+The app will be available at `http://localhost`.
 
 ## Project Structure
 
 ```
-url-shortener/
-├── pyproject.toml              # uv workspace + ruff + pytest config
-├── docker-compose.yml
-├── nginx/nginx.conf            # Reverse proxy config
-├── proto/                      # Protobuf definitions
-├── libs/shared/                # Shared library (JWT, gRPC stubs)
-├── services/
-│   ├── auth-service/
-│   ├── shortener-service/
-│   ├── redirect-service/
-│   └── analytics-service/
-└── .pre-commit-config.yaml
+shortly/
+├── frontend/                  # Next.js app
+├── backend/
+│   ├── proto/                 # Protobuf definitions
+│   ├── libs/shared/           # Shared lib (JWT utils, gRPC stubs)
+│   └── services/
+│       ├── auth-service/
+│       ├── shortener-service/
+│       ├── redirect-service/
+│       └── analytics-service/
+├── nginx/                     # Reverse proxy config
+└── docker-compose.yml
 ```
