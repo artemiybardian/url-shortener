@@ -25,7 +25,7 @@ The backend is split into four independent microservices communicating via gRPC,
 
 ```bash
 cp .env.example .env
-docker compose up --build
+docker compose up --build -d
 ```
 
 The app will be available at `http://localhost`.
