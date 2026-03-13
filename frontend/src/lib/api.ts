@@ -4,10 +4,12 @@ import {
   UrlSchema,
   UrlListSchema,
   StatsSchema,
+  ShortenResultSchema,
   type TokenPair,
   type User,
   type Url,
   type Stats,
+  type ShortenResult,
 } from "./schemas";
 import { getRefreshToken, saveTokens, clearTokens } from "./auth";
 
@@ -152,6 +154,14 @@ export async function deleteUrl(
 export async function getStats(shortCode: string): Promise<Stats> {
   const data = await request(`/api/analytics/${shortCode}/stats`);
   return StatsSchema.parse(data);
+}
+
+export async function shortenAnonymous(url: string): Promise<ShortenResult> {
+  const data = await request("/api/shorten/", {
+    method: "POST",
+    body: JSON.stringify({ original_url: url }),
+  });
+  return ShortenResultSchema.parse(data);
 }
 
 export function getQrUrl(shortCode: string): string {

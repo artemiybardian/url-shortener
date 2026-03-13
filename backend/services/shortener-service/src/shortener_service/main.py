@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from shared.proto import shortener_pb2_grpc
 from shortener_service.config import settings
 from shortener_service.grpc_server import ShortenerGRPCServicer
-from shortener_service.router import router
+from shortener_service.router import public_router, router
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +35,7 @@ app = FastAPI(
 )
 
 app.include_router(router)
+app.include_router(public_router, prefix="/shorten", tags=["public"])
 
 
 @app.get("/health")

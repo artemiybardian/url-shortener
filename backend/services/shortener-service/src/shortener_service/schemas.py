@@ -9,6 +9,17 @@ class URLCreate(BaseModel):
     custom_code: str | None = None
 
 
+class ShortenRequest(BaseModel):
+    original_url: HttpUrl
+
+
+class ShortenResponse(BaseModel):
+    short_code: str
+    original_url: str
+
+    model_config = {"from_attributes": True}
+
+
 class URLResponse(BaseModel):
     id: uuid.UUID
     short_code: str

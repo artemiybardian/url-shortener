@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Header } from "./header";
 
 export const metadata: Metadata = {
   title: "URL Shortener",
@@ -13,8 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gray-50 text-gray-900 antialiased">
-        <main className="mx-auto max-w-3xl px-4 py-8">{children}</main>
+      <body className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased">
+        <Header />
+        <main className="mx-auto max-w-2xl px-4 py-10">{children}</main>
       </body>
     </html>
   );

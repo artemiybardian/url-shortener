@@ -30,41 +30,63 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto max-w-sm space-y-6 pt-16">
-      <h1 className="text-2xl font-bold">Register</h1>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full rounded border px-3 py-2"
-        />
-        <input
-          type="password"
-          placeholder="Password (min 6 chars)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          minLength={6}
-          className="w-full rounded border px-3 py-2"
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded bg-black px-4 py-2 text-white disabled:opacity-50"
-        >
-          {loading ? "Creating account..." : "Register"}
-        </button>
-      </form>
-      <p className="text-sm text-gray-500">
-        Already have an account?{" "}
-        <Link href="/login" className="text-black underline">
-          Login
-        </Link>
-      </p>
+    <div className="flex min-h-[60vh] items-center justify-center">
+      <div className="w-full max-w-[420px] rounded-2xl border border-[var(--card-border)] bg-[var(--card)] p-8 shadow-sm">
+        <div className="mb-8 text-center">
+          <h1 className="text-2xl font-semibold">Sign up</h1>
+          <p className="mt-1 text-sm text-[var(--muted)]">
+            Create your account
+          </p>
+        </div>
+
+        {error && (
+          <p className="mb-4 rounded-lg bg-[var(--danger)]/10 px-3 py-2 text-sm text-[var(--danger)]">
+            {error}
+          </p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Email <span className="text-[var(--danger)]">*</span>
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full rounded-lg border border-[var(--input-border)] bg-[var(--input)] px-4 py-3 text-sm text-white outline-none transition-all focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/25"
+            />
+          </div>
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Password <span className="text-[var(--danger)]">*</span>
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              className="w-full rounded-lg border border-[var(--input-border)] bg-[var(--input)] px-4 py-3 text-sm text-white outline-none transition-all focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/25"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-[var(--accent)] py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--accent-hover)] disabled:opacity-50"
+          >
+            {loading ? "Creating account..." : "Sign up"}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-[var(--muted)]">
+          Already have an account?{" "}
+          <Link href="/login" className="text-[var(--accent)] hover:underline">
+            Sign in
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

@@ -8,12 +8,21 @@ from shared.dependencies import require_auth
 from shortener_service.config import settings
 from shortener_service.database import get_session
 from shortener_service.qr import generate_qr_png
-from shortener_service.schemas import URLCreate, URLResponse
+from shortener_service.schemas import ShortenRequest, ShortenResponse, URLCreate, URLResponse
 from shortener_service.service import create_short_url, deactivate_url, get_url_by_code, list_user_urls
 
 router = APIRouter()
+public_router = APIRouter()
 
 get_current_user = require_auth(settings.jwt_secret_key, settings.jwt_algorithm)
+
+
+@public_router.post("/", response_model=ShortenResponse, status_code=status.HTTP_201_CREATED)
+async def shorten_anonymous(
+    body: ShortenRequest,
+    session: AsyncSession = Depends(get_session),  # noqa: B008
+):
+    return await create_short_url(session, str(body.original_url))
 
 
 @router.post("/", response_model=URLResponse, status_code=status.HTTP_201_CREATED)

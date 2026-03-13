@@ -26,10 +26,19 @@ async def redirect(short_code: str, request: Request):
     if not url_data["is_active"]:
         raise HTTPException(status_code=status.HTTP_410_GONE, detail="This link has been deactivated")
 
-    client_ip = request.client.host if request.client else "unknown"
+    # Порядок как в backend-clone: X-Forwarded-For (цепочка прокси), X-Real-IP, CF-Connecting-IP
+    x_forwarded_for = request.headers.get("x-forwarded-for")
+    if x_forwarded_for:
+        client_ip = x_forwarded_for.split(",")[0].strip()
+    elif request.headers.get("x-real-ip"):
+        client_ip = request.headers.get("x-real-ip")
+    elif request.headers.get("cf-connecting-ip"):
+        client_ip = request.headers.get("cf-connecting-ip")
+    else:
+        client_ip = request.client.host if request.client else "unknown"
 
-    _task = asyncio.create_task(
-        _log_click_safe(  # noqa: RUF006
+    asyncio.create_task(
+        _log_click_safe(
             url_id=url_data["url_id"],
             short_code=short_code,
             ip_address=client_ip,
@@ -39,7 +48,15 @@ async def redirect(short_code: str, request: Request):
         )
     )
 
-    return RedirectResponse(url=url_data["original_url"], status_code=status.HTTP_301_MOVED_PERMANENTLY)
+    return RedirectResponse(
+        url=url_data["original_url"],
+        status_code=status.HTTP_302_FOUND,
+        headers={
+            "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        },
+    )
 
 
 async def _log_click_safe(**kwargs) -> None:

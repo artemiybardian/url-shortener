@@ -48,7 +48,13 @@ export const StatsSchema = z.object({
   recent_clicks: z.array(ClickSchema),
 });
 
+export const ShortenResultSchema = z.object({
+  short_code: z.string(),
+  original_url: z.string(),
+});
+
 export type TokenPair = z.infer<typeof TokenPairSchema>;
 export type User = z.infer<typeof UserSchema>;
 export type Url = z.infer<typeof UrlSchema>;
 export type Stats = z.infer<typeof StatsSchema>;
+export type ShortenResult = z.infer<typeof ShortenResultSchema>;

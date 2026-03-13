@@ -23,7 +23,7 @@ async def get_url_by_code(session: AsyncSession, short_code: str) -> URL | None:
 async def create_short_url(
     session: AsyncSession,
     original_url: str,
-    user_id: uuid.UUID,
+    user_id: uuid.UUID | None = None,
     custom_code: str | None = None,
 ) -> URL:
     code = custom_code or _generate_code()

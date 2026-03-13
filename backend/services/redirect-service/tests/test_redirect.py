@@ -12,7 +12,7 @@ async def test_redirect_success(client, mock_resolve_url, mock_log_click, mock_c
     }
 
     resp = await client.get("/abc123")
-    assert resp.status_code == 301
+    assert resp.status_code == 302
     assert resp.headers["location"] == "https://example.com"
     mock_resolve_url.assert_awaited_once_with("abc123")
 
@@ -50,7 +50,7 @@ async def test_redirect_uses_cache(client, mock_resolve_url, mock_log_click):  #
         patch("redirect_service.router.set_cached_url", new_callable=AsyncMock) as mock_set,
     ):
         resp = await client.get("/cached")
-        assert resp.status_code == 301
+        assert resp.status_code == 302
         assert resp.headers["location"] == "https://cached.com"
         mock_resolve_url.assert_not_awaited()
         mock_set.assert_not_awaited()
